@@ -1,34 +1,39 @@
 # Humanizing free text (cover notes, screening answers, recruiter replies)
 
-Some recruiters and ATS tools flag text that reads as AI-written. If the user wants it, run Claude-drafted free text through a web AI humanizer they already have an account with (tested with isgen.ai's AI Humanizer and AI Detector). Skip this step if the user doesn't want it.
+Text Claude drafts can read as AI-written: inflated wording, the rule of three, stock transitions, uniform sentence rhythm. This step removes those patterns with the **Humanizer** plugin for Claude ([blader/humanizer](https://github.com/blader/humanizer), listed in Anthropic's plugin directory). It runs inside Claude: no browser, no account, no character limits.
 
-## Rules
+The step is optional. Skip it if the user doesn't want it. It's most useful for longer text a person will read (cover notes, "why this company" answers). For short factual answers (location, salary, notice period, right to work), clear and true matters more than style.
 
-- The user signs in to the humanizer themselves. If it shows a login page or a lower signed-out character limit, stop and ask them to sign in.
-- Don't click upgrade, pricing or subscription offers.
-- Send only free text. Keep out (and re-insert afterwards): greetings and sign-offs, short factual lines (location, salary, notice period), verbatim quotes, and lists of tool names, which humanizers mangle.
-- Use a formal style for applications and recruiter emails.
+## Install (once)
 
-## Mechanics (isgen.ai, Nov 2026)
+In Claude Code:
 
-1. Open `https://isgen.ai/ai-humanizer` in a new tab. Check the counter under the box shows the signed-in limit (e.g. `0/20000 Characters`).
-2. `find` "Paste text or write here", `form_input` the text, confirm the counter changed.
-3. Click Humanize; ~30 s for 2,500 characters.
-4. Read the output with JavaScript (`get_page_text` returns nothing on this site). Store it and read in slices:
-   ```js
-   const els=[...document.querySelectorAll('div,p')].filter(e=>e.innerText&&e.innerText.includes('<a phrase from the output>')&&!e.querySelector('textarea'));
-   els.sort((a,b)=>a.innerText.length-b.innerText.length); window.__out=els[0].innerText; window.__out.length
-   ```
-5. Optional score check at `https://isgen.ai` (AI Detector): paste the final repaired text, click "Detect AI Content", report the Human/AI split. At most two humanize-and-check rounds; don't chase a perfect score.
+```
+/plugin marketplace add blader/humanizer
+/plugin install humanizer@humanizer
+```
 
-## Fact-check (mandatory)
+In the Claude desktop app, add **Humanizer** (by blader) from the plugin directory. If the plugin isn't installed, tell the user how to add it, and meanwhile apply the same idea yourself: plain words, varied sentence length, no filler, no rule-of-three lists, no "I am excited to…" openers.
 
-Compare the output with the original, line by line, against `facts.md`. Humanizers reliably:
+## Use
 
-- **inflate claims**: "worked with Gemini" → "used Gemini in production"; "built" → "designed and launched"; "several" → "numerous"; "hands-on experience" → "knowledgeable"
-- **invent details**: a line about "generating the applicant's resume" that nobody wrote; "from scratch"; "independently developed"
-- **break facts**: "Claude Code" → "the Claude Code model"; "the client's brands" → "our brands"; a notice-period answer turned into "no notice from my previous employer" when the user is still employed
-- **garble conditions**: "sponsorship now and while on the visa" → "sponsorship until my visa is granted, and also…"
-- **drop structure**: list numbers, placeholders, emojis, product names shortened
+1. Draft the text from `facts.md` first. The humanizer improves wording; it can't fix wrong content.
+2. Keep out of the humanizer, and re-insert afterwards unchanged: greetings and sign-offs, short factual lines (location, salary, notice period), verbatim quotes, and lists of tool names.
+3. Invoke the `humanizer` skill on the remaining text. Tell it the audience (a recruiter or hiring manager), the register (professional, plain), and that every fact, name, number and date must stay exactly as written.
+4. Fact-check the result (below), then save the final text and a short "What changed" note next to the application.
 
-Keep the humanizer's new sentence shapes where they're correct (that's what makes the text read less like AI); repair only what's wrong. Then save the final text and a short "What changed" list (facts restored, score) next to the application.
+## Fact-check (always)
+
+Any rewriting step can change meaning, so compare the output with the original line by line against `facts.md`. Watch for:
+
+- **inflated claims**: "worked with X" → "used X in production"; "built" → "designed and launched"; "several" → "numerous"; "hands-on experience" → "expert"
+- **invented details**: "from scratch", "independently", "led the team", metrics nobody gave
+- **changed facts**: product or tool names altered ("Claude Code" → "the Claude Code model"), the client's brands turned into "our brands", tense changes that imply the user left a job they still hold
+- **garbled conditions**: visa, notice-period and availability sentences reworded until they say something else
+- **lost structure**: list numbering, labels the recruiter asked for, names shortened
+
+Keep the new, more natural sentence shapes where they're correct; repair only what's wrong. If a repair puts back a stiff phrase, that's fine. Accuracy beats style.
+
+## Optional: a web humanizer instead
+
+Some users prefer a web humanizer with an AI-detector score (several exist; most need an account). If so: the user signs in themselves, you fill the text box with `form_input`, read the output with JavaScript (store it in `window.__out` and read it in slices; output over ~1,000 characters is cut off), and run the same fact-check. Don't chase detector scores past two rounds; they swing widely on small wording changes and recruiters rarely run them.

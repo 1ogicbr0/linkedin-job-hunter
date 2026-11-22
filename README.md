@@ -3,18 +3,18 @@
 A [Claude](https://claude.com/claude-code) skill that runs a careful, end-to-end job hunt in your own signed-in Chrome:
 
 - **Find**: searches LinkedIn for fresh roles that match your stack and where you can legally work, skips jobs with 100+ applicants, region-locked "remote", language requirements and scams, and reports matches with links.
-- **Apply**: tailors a 1-page CV per job (DOCX + PDF), drafts answers only from facts you've approved, optionally humanizes them and fact-checks the result, fills Easy Apply or the company's ATS form (Greenhouse, Lever, Ashby, Workable, HiBob…), and **stops before Submit** until you say yes.
+- **Apply**: tailors a 1-page CV per job (DOCX + PDF), drafts answers only from facts you've approved, optionally humanizes them with the Humanizer plugin and fact-checks the result, fills Easy Apply or the company's ATS form (Greenhouse, Lever, Ashby, Workable, HiBob…), and **stops before Submit** until you say yes.
 - **Follow up**: checks your inbox for recruiter replies, sorts rejections from questions, drafts answers, and sends only on your yes.
 - **Keep records**: a single log of every job seen and every application, plus a folder per application with the exact answers and CV sent.
 
-It was built and refined over a few weeks of real use: dozens of searches, 20+ applications, recruiter screening emails. The lessons from that (LinkedIn's new search page, ATS form quirks, humanizers inventing claims) are baked into the instructions.
+It was built and refined over a few weeks of real use: dozens of searches, 20+ applications, recruiter screening emails. The lessons from that (LinkedIn's new search page, ATS form quirks, rewrites inventing claims) are baked into the instructions.
 
 ## What you need
 
 - **Claude Code** (CLI or desktop app) or another Claude client that supports skills.
 - **[Claude in Chrome](https://claude.com/chrome)**, the browser extension, connected to the Chrome where you're signed in to LinkedIn and your email.
 - **Node.js 18+** and **Google Chrome/Chromium** for the CV builder (PDF output).
-- *Optional:* an account with a web AI humanizer (tested with isgen.ai).
+- *Optional:* the **Humanizer** plugin for Claude ([blader/humanizer](https://github.com/blader/humanizer)) to make drafted answers read less like AI. In Claude Code: `/plugin marketplace add blader/humanizer` then `/plugin install humanizer@humanizer`.
 
 ## Install
 
@@ -66,7 +66,7 @@ skills/linkedin-job-hunter/
 ├── references/
 │   ├── search.md            # LinkedIn search URLs, location IDs, page-reading snippets
 │   ├── apply.md             # ATS route checks, form quirks, CV tailoring
-│   ├── humanize.md          # optional humanizer step + the fact-check it needs
+│   ├── humanize.md          # optional Humanizer-plugin step + the fact-check it needs
 │   └── inbox.md             # finding replies and answering recruiters
 ├── templates/               # profile, facts, jobs log, example CV
 └── scripts/cv-builder/      # node build.js <cv.json> <out-dir> → DOCX + PDF
