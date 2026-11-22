@@ -1,0 +1,39 @@
+{
+  "name": "Alex Example",
+  "contact": [
+    "City, Country | +00 000 0000000 | alex@example.com",
+    "linkedin.com/in/alex-example | github.com/alex-example"
+  ],
+  "summary": "Full-stack developer with 4+ years building products end to end with TypeScript, Node.js, React and PostgreSQL. Shipped AI features in production with LLM APIs.",
+  "jobs": [
+    {
+      "company": "Example Agency",
+      "title": "Full-Stack Developer",
+      "right": "Feb 2024 – Present",
+      "bullets": [
+        "Build Next.js front ends and CMS back ends for e-commerce clients.",
+        "Added an LLM-powered product finder used on the client's main site."
+      ]
+    },
+    {
+      "company": "Freelance",
+      "title": "Full-Stack Developer",
+      "right": "Aug 2022 – Jan 2024",
+      "bullets": [
+        "Built and deployed a live auction platform (React, Node.js, MongoDB)."
+      ]
+    }
+  ],
+  "skills": [
+    ["Languages", "TypeScript, JavaScript, Python, SQL"],
+    ["AI", "OpenAI API, Claude API, prompt design, embeddings"],
+    ["Frameworks", "React, Next.js, Node.js, Express"],
+    ["Data & Cloud", "PostgreSQL, MongoDB, Supabase, AWS"]
+  ],
+  "education": [
+    { "school": "Example University", "degree": "BSc Computer Science", "right": "2018 – 2022" }
+  ],
+  "projects": [
+    { "name": "Side Project", "year": "2025", "text": "What it does, the stack, and your part." }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "cv-builder",
+  "private": true,
+  "description": "Builds a 1-page CV (DOCX + PDF) from a JSON content file",
+  "dependencies": {
+    "docx": "^9.15.0"
+  }
+}
