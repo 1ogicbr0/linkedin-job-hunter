@@ -28,6 +28,7 @@ Copy to `job-hunt/profile.md` and fill it in. Anything you leave as **ASK** make
 | Needs visa sponsorship? | ASK |
 | Voluntary self-ID (gender, ethnicity…) | Prefer not to say |
 | How did you hear about us | LinkedIn |
+| Humanizer for free text | ASK: Humanizer plugin (free) / isgen.ai (paid plan, see references/humanize.md) / none |
 
 ## Search preferences
 

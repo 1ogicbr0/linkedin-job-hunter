@@ -1,7 +1,7 @@
 ---
 name: linkedin-job-hunter
 description: End-to-end job hunting on LinkedIn (and the company career pages it links to) with the user's own signed-in Chrome. Finds fresh jobs that match the user's profile and location rules, vets them (applicant count, visa/remote eligibility, fit, scams), reports them with clickable links, tailors a CV per job, humanizes and fact-checks free-text answers, fills Easy Apply or external ATS forms (Greenhouse, Lever, Ashby, Workable, HiBob…) and stops before Submit for the user's explicit yes, checks the inbox for recruiter replies and drafts answers, and logs every job and application. Use this whenever the user says things like "find me jobs", "scan LinkedIn", "any new jobs?", "apply to the 2nd one", "fill this application", "tailor my CV for this job", "did anyone reply to my applications?", "answer this recruiter", or pastes a linkedin.com/jobs link, even if they don't say "LinkedIn" or "skill".
-compatibility: Needs Claude in Chrome (the browser extension) on the user's signed-in Chrome. The CV builder needs Node.js 18+ and Google Chrome or Chromium for PDF output. The optional humanizer step uses the Humanizer plugin for Claude (blader/humanizer).
+compatibility: Needs Claude in Chrome (the browser extension) on the user's signed-in Chrome. The CV builder needs Node.js 18+ and Google Chrome or Chromium for PDF output. The optional humanizer step uses the user's choice: the free Humanizer plugin for Claude (blader/humanizer) or the paid isgen.ai AI Humanizer in their browser.
 ---
 
 # LinkedIn job hunter
@@ -30,6 +30,8 @@ job-hunt/
     ├── cv.json               # CV tailored to this job
     └── <Name>_CV.docx / .pdf # built by scripts/cv-builder
 ```
+
+During setup, also ask which humanizer they want for free-text answers (Humanizer plugin, isgen.ai, or none) and show the comparison and isgen pricing from `references/humanize.md` so they can decide.
 
 Read `profile.md`, `facts.md` and the top of `jobs-log.md` at the start of every session. If a value the task needs is marked **ASK** in `profile.md`, ask the user once and write the answer back, so it's never asked twice.
 
@@ -86,7 +88,7 @@ Read `references/apply.md` for route checks and per-ATS quirks (date pickers tha
 1. **Route.** Easy Apply stays on LinkedIn. "Apply" opens the company's page: check the final domain is the company's own site or a known ATS before filling anything. Sites that need an account first (Workday, Taleo, iCIMS, SuccessFactors) are the user's to do; give them the tab.
 2. **Tailor the CV.** Copy `cv/cv-base.json` to `applications/<folder>/cv.json`, then reorder and reword *from facts only* so the summary and top bullets lead with what this job asks for. Build it: `node <skill>/scripts/cv-builder/build.js <folder>/cv.json <folder>`. Keep it to 1 page (the builder warns). Record what you changed in `application.md`.
 3. **Prepare answers.** Contact and form values from `profile.md`; collect every **ASK** for this form and ask in one message. Free-text answers and cover notes only from `facts.md`, led by the user's closest real project. Yes/no questions truthfully; voluntary self-ID questions "Prefer not to say" unless the user says otherwise.
-4. **Humanize free text** with the Humanizer plugin (see `references/humanize.md`), then fact-check every line against `facts.md`. Any rewriting step can inflate or invent claims; repairing them is part of the job, not optional.
+4. **Humanize free text** with the humanizer the user chose in `profile.md` (see `references/humanize.md`; if they haven't chosen, offer the options there, including isgen's pricing), then fact-check every line against `facts.md`. Any rewriting step can inflate or invent claims; repairing them is part of the job, not optional.
 5. **Fill the form**, read it back, and show the user a summary: job, submitting domain, every field and answer, CV file, cover note. Ask: "Submit the application to <Company> for <Role>?" and end the turn.
 6. **On their yes:** click Submit once, read the confirmation, screenshot it. If it fails, report the exact error; don't retry blindly. Log it under **Applied** in `jobs-log.md` and set the status in `application.md`.
 
